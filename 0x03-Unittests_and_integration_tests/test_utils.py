@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 """Unit tests for utils module"""
 import unittest
+import utils
 from unittest.main import main
+from unittest.mock import patch, MagicMock
 from utils import *
 from parameterized import parameterized
 from typing import Tuple, Dict, Any
@@ -34,6 +36,12 @@ class TestAccessNestedMap(unittest.TestCase):
         with self.assertRaises(KeyError) as ke:
             access_nested_map(nested_map, path)
             self.assertIn(ke.exception.args[0], path)
+
+    def test_get_json(self):
+        with patch(utils.requests.get) as mock_get:
+            mock_response = MagicMock()
+            mock_response.json.return_value = {"payload": True}
+
 
 
 if __name__ == "__main__":
