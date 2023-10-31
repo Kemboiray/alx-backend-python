@@ -38,7 +38,7 @@ class TestAccessNestedMap(unittest.TestCase):
             self.assertIn(ke.exception.args[0], path)
 
 
-class TeseGetJson(unittest.TestCase):
+class TestGetJson(unittest.TestCase):
     """This class encapsulates a test for the ``get_json`` function"""
 
     @parameterized.expand([("http://example.com", {
