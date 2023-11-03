@@ -39,12 +39,42 @@ class TestGetJson(unittest.TestCase):
         ("http://holberton.io", {"payload": False})
     ])
     def test_get_json(self, test_url: str, test_payload: Dict):
-        """``get_json`` returns the correct JSON response\n"""
+        """
+        ``get_json`` returns the correct JSON response and calls\
+ ``requests.get`` once for each url argument
+        """
         with patch("utils.requests.get") as mock_get:
             mock_response = MagicMock()
             mock_response.json.return_value = test_payload
             mock_get.return_value = mock_response
             self.assertEqual(get_json(test_url), test_payload)
+            mock_get.assert_called_once_with(test_url)
+
+
+class TestMemoize(unittest.TestCase):
+    """This class encapsulates a test for the ``memoize`` function"""
+
+    def test_memoize(self):
+        """Test that when calling a_property twice, the correct result\
+ is returned but a_method is only called once using ``mock``"""
+        class TestClass:
+            """This class encapsulates a test for the ``memoize`` function"""
+
+            def a_method(self):
+                """This method returns a property"""
+                return 42
+
+            @memoize
+            def a_property(self):
+                """This method returns a property"""
+                return self.a_method()
+
+        with patch.object(TestClass, "a_method") as mock_method:
+            test_class = TestClass()
+            mock_method.return_value = 42
+            test_class.a_property
+            test_class.a_property
+            mock_method.assert_called_once()
 
 
 if __name__ == "__main__":
