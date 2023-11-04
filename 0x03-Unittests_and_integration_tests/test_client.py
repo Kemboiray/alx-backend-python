@@ -11,6 +11,10 @@ class TestGithubOrgClient(unittest.TestCase):
     """This class defines tests for `GithubOrgClient`'s methods"""
 
     @parameterized.expand([("google"), ("abc")])
-    @patch.object(GithubOrgClient, "client.get_json", return_value={"repos_url": "google.com"})
-    def test_org(self, org: str):
-       sample = GithubOrgClient(org)
+    @patch("client.get_json", return_value={"repos_url": "google.com"})
+    def test_org(self, org: str, mock_get_json):
+        sample = GithubOrgClient(org)
+        self.assertEqual(sample.org, mock_get_json.return_value)
+        sample.org
+        mock_get_json.assert_called_once()
+    # sample = GithubOrgClient(org)
